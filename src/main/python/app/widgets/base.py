@@ -1,4 +1,3 @@
-import sys
 from PyQt5.QtWidgets import QWidget,QTabWidget,QVBoxLayout
 
 class SWidget(QWidget):
@@ -8,14 +7,14 @@ class SWidget(QWidget):
 
 class STabWidget(SWidget):
 	def __init__(self, parent,name,tabs):
-		super(TabWidget, self).__init__(parent,name)
+		super(STabWidget, self).__init__(parent,name)
 		self.layout = QVBoxLayout(self)
 		self.tab_manager = QTabWidget()
 		self.tab_manager.resize(300,200)
 
 		for tab in tabs:
 			self.tab_manager.addTab(tab,tab.name)
-			tab.layout = QVBoxLayout(self)
+			tab.layout = QVBoxLayout(tab)
 			tab.setLayout(tab.layout)
 		 
 		self.layout.addWidget(self.tab_manager)
