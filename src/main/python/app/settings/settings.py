@@ -14,11 +14,12 @@ class Settings(QSettings):
         defaults.read(config_file)
 
         for section in defaults.sections():
+            self.beginGroup(section)
             for key in defaults[section]:
                 if not self.contains(key):
                     value = defaults[section][key]
-                    config_key = '{}/{}'.format(section, key)
-                    self.setValue(config_key, value)
+                    self.setValue(key, value)
+            self.endGroup()
 
         self.sync()
 
