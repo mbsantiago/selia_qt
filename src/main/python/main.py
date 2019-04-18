@@ -3,6 +3,7 @@ import sys
 from fbs_runtime.application_context import ApplicationContext
 from fbs_runtime.application_context import cached_property
 from app import Selia
+from app.settings import Settings
 
 
 ORGANIZATION_NAME = 'CONABIO'
@@ -23,6 +24,9 @@ class AppContext(ApplicationContext):
         self.app.setOrganizationName(ORGANIZATION_NAME)
         self.app.setOrganizationDomain(ORGANIZATION_DOMAIN)
         self.app.setApplicationName(APPLICATION_NAME)
+
+        settings = Settings()
+        settings.initialize()
 
 
 if __name__ == '__main__':
