@@ -18,6 +18,7 @@ class SDialog(object):
 		self.layout = QVBoxLayout(self.dialog)
 		self.buildForm()
 		self.buildButtons()
+		self.buildButtonsLayout()
 
 	def buildForm(self):
 		for key in self.form_config:
@@ -31,10 +32,12 @@ class SDialog(object):
 	def buildButtons(self):
 		self.buttons["OK"] = QPushButton(aname,self.dialog)
 		self.buttons["OK"].clicked.connect(self.close)
+
+	def buildButtonsLayout(self):
 		button_layout = QHBoxLayout()
 		for key in self.buttons:
 			button_layout.addWidget(self.buttons[key])
-		self.layout.addWidget(button_layout)
+		self.layout.addLayout(button_layout)
 
 	def close(self):
 		self.dialog.accept()
@@ -50,17 +53,13 @@ class SAuthDialog(SDialog):
 		self.cancel_label = cancel_label
 		self.enter_label = enter_label
 		super(SAuthDialog, self).__init__(title,form_config)
-		self.dialog.resize(350, 250)
+		self.dialog.resize(350, 200)
 
 	def buildButtons(self):
 		self.buttons["CANCEL"] = QPushButton(self.cancel_label,self.dialog)
 		self.buttons["ENTER"] = QPushButton(self.enter_label,self.dialog)
 		self.buttons["CANCEL"].clicked.connect(self.handleCancel)
 		self.buttons["ENTER"].clicked.connect(self.handleEnter)
-		button_layout = QHBoxLayout()
-		for key in self.buttons:
-			button_layout.addWidget(self.buttons[key])
-		self.layout.addLayout(button_layout)
 
 	def handleCancel(self):
 		app = QApplication.instance()

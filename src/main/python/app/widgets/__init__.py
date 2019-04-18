@@ -1,4 +1,5 @@
-from .base import *
-from . import base
+from .base import SWidget,STabWidget
+from .map import SMapWidget
+from .table import STableWidget, SEventsTableModel
 
-__all__ = [name for name in dir(base) if "__" not in name]
+__all__ = ["SWidget","STabWidget","SMapWidget","STableWidget","SEventsTableModel"]

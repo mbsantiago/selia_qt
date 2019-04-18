@@ -1,5 +1,6 @@
 from PyQt5.QtWidgets import QWidget,QTabWidget,QVBoxLayout
 
+
 class SWidget(QWidget):
 	def __init__(self,parent,name):
 		super(SWidget, self).__init__(parent)
@@ -20,4 +21,4 @@ class STabWidget(SWidget):
 		self.layout.addWidget(self.tab_manager)
 		self.setLayout(self.layout)
 
- 
+

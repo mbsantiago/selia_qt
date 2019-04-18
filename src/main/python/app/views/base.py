@@ -1,5 +1,5 @@
-from ..widgets import SWidget
-from ..windows import SMainWindow
+from ..widgets import SWidget,SMapWidget,STableWidget,SEventsTableModel
+from ..windows import STabMainWindow
 
 class SView(object):
 	def __init__(self,name):
@@ -41,30 +41,34 @@ class SMultiView(SView):
 
 class SEventsView(SSingleView):
 	def __init__(self):
-		super(SEventsView, self).__init__("EVENTS")
+		super(SEventsView, self).__init__("Eventos de muestreo")
+	def setWidget(self):
+		self.widget = STableWidget(None,self.name,SEventsTableModel(dataArr=[["alksjdñalksdñflkasdñfloiqief32","2017-01-18","34341lkjñlkjñlkfñlk23kl23hyu"]],headerArr=["ID","Fecha","Sitio"]))
 
 
 class SSitesView(SSingleView):
 	def __init__(self):
-		super(SSitesView, self).__init__("SITES")
+		super(SSitesView, self).__init__("Sitios")
+	def setWidget(self):
+		self.widget = SMapWidget(None,self.name,(21.4121622297254,-101.38183593750001),4)
 
 
 class SDevicesView(SSingleView):
 	def __init__(self):
-		super(SDevicesView, self).__init__("DEVICES")
+		super(SDevicesView, self).__init__("Dispositivos")
 
 
 class SItemsView(SSingleView):
 	def __init__(self):
-		super(SItemsView, self).__init__("ITEMS")
+		super(SItemsView, self).__init__("Multimedia")
 
 
 class SMainView(SMultiView):
 	def __init__(self):
 		super(SMainView, self).__init__("Selia",[SSitesView(),SEventsView(),SDevicesView(),SItemsView()])
-		print(self.views)
-		self.window = SMainWindow(self.name,title="Bases de datos Conabio",tabs=[self.views["SITES"].widget,self.views["EVENTS"].widget,self.views["DEVICES"].widget,self.views["ITEMS"].widget])
-		
+		widgets = [self.views[key].widget for key in ["Sitios","Eventos de muestreo","Dispositivos","Multimedia"]]
+		self.window = STabMainWindow(self.name,title="Bases de datos Conabio",widgets=widgets)
+
 	def show(self):
 		self.window.show()
 
