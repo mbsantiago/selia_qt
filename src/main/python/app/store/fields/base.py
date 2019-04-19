@@ -2,7 +2,6 @@ from abc import ABC
 from abc import abstractmethod
 
 
-
 class Field(ABC):
     @property
     @abstractmethod
@@ -14,22 +13,18 @@ class Field(ABC):
     def type(self):
         pass
 
-
-class Model(ABC):
-    @classmethod
-    def name(cls):
-        return str(cls.__name__).lower()
-
     @abstractmethod
-    def act(self, action):
+    def to_sql(self):
         pass
 
-    @classmethod
     @abstractmethod
-    def get_type_info(cls):
+    def to_json(self):
         pass
 
-    @classmethod
     @abstractmethod
-    def validate(self, data):
+    def from_json(self):
+        pass
+
+    @abstractmethod
+    def validate(self):
         pass

@@ -2,19 +2,51 @@
 Storage to local database handlers
 """
 import os
-from PyQt5 import QtSql
+from contextlib import contextmanager
+
 from PyQt5.QtCore import QStandardPaths
-from ..exceptions import DatabaseError
+
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.ext.declarative import declarative_base
+
+from .model_base import Base
+
 from ..settings import Settings
+
+
+Base = declarative_base(cls=Base)  # pylint: disable=invalid-name
 
 
 class LocalStorage():
     """File storage handler"""
+
+    BD_BASE = Base
+
     def __init__(self, path):
         self.settings = self.get_settings()
         self.path = self.get_path(path)
         self.filename = self.get_filename()
-        self.database = self.config_database()
+        self.engine, self.session_maker = self.config_database()
+
+        self.initialize()
+
+    @contextmanager
+    def session_context(self):
+        """Database session context"""
+        session = self.session_maker()
+        try:
+            yield session
+            session.commit()
+        except:
+            session.rollback()
+            raise
+        finally:
+            session.close()
+
+    def get_session(self):
+        """Get a database session"""
+        return self.session_maker()
 
     def get_settings(self):  # pylint: disable=no-self-use
         """Extract storage settings from global settings file"""
@@ -46,10 +78,13 @@ class LocalStorage():
 
     def config_database(self):
         """Create and configure sqlite database"""
-        database = QtSql.QSqlDatabase.addDatabase('QSQLITE')
-        database.setDatabaseName(self.filename)
+        engine = create_engine('sqlite:///{path}'.format(path=self.filename), echo=True)
+        session_maker = sessionmaker()
+        session_maker.configure(bind=engine)
+        return engine, session_maker
 
-        if not database.open():
-            raise DatabaseError("Database could not be created correctly")
-
-        return database
+    def initialize(self):
+        """Build database if not previously configured"""
+        conn = self.engine.connect()
+        with self.session_context() as session:
+            print('bla')
